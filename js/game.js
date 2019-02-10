@@ -423,8 +423,8 @@ document.onreadystatechange = function () {
             scoreLayer.redraw = true;
             scoreLayer.drawText(
                 'Timer: ' + Math.round(elapsedTime / 1000),
+                700,
                 50,
-                570,
                 '14pt "Trebuchet MS", Helvetica, sans-serif',
                 '#FFFFFF',
                 'left'
