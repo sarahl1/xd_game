@@ -375,7 +375,7 @@ document.onreadystatechange = function () {
                         );
         }
 
-        function updateTime() {
+        function displayGameOver() {
             playerLayer.visible = false;
             itemLayer.visible = false;
             itemLayer1.visible = true;
@@ -426,7 +426,7 @@ document.onreadystatechange = function () {
             );
 
             setTimeout(function () {
-                updateTime();
+                displayGameOver();
             }, timeGiven);
         });
     }
