@@ -77,7 +77,7 @@ document.onreadystatechange = function () {
         var playerLayer = game.createLayer("players");
         var player = new PixelJS.Player();
         player.addToLayer(playerLayer);
-        player.pos = { x: 250, y: 300 };
+        player.pos = { x: width/2, y: height/2-100 };
         player.size = { width: 64, height: 64 };
         player.velocity = { x: xvel, y: yvel };
         player.asset = new PixelJS.AnimatedSprite();
@@ -92,7 +92,7 @@ document.onreadystatechange = function () {
 
         var itemLayer = game.createLayer('items');
         var coin = itemLayer.createEntity();
-        coin.pos = { x: 400, y: 150 };
+        coin.pos = { x: 400, y: 450 };
         coin.size = { width: 12, height: 16 };
         coin.asset = new PixelJS.AnimatedSprite();
         coin.asset.prepare({
@@ -104,11 +104,35 @@ document.onreadystatechange = function () {
         });
 
         var compost = itemLayer.createEntity();
-        compost.pos = { x: 420, y: 170 };
+        compost.pos = { x: width/3 , y: height/2 };
         compost.size = { width: 16, height: 16 };
         compost.asset = new PixelJS.AnimatedSprite();
         compost.asset.prepare({
             name: 'compost.png',
+            frames: 1,
+            rows: 1,
+            speed: 80,
+            defaultFrame: 0
+        });
+
+        var garbage = itemLayer.createEntity();
+        garbage.pos = { x: width/2+20 , y: height/2 };
+        garbage.size = { width: 19, height: 16 };
+        garbage.asset = new PixelJS.AnimatedSprite();
+        garbage.asset.prepare({
+            name: 'garbage.png',
+            frames: 1,
+            rows: 1,
+            speed: 80,
+            defaultFrame: 0
+        });
+
+        var recycling = itemLayer.createEntity();
+        recycling.pos = { x: (width*2)/3 +20 , y: height/2 };
+        recycling.size = { width: 16, height: 16 };
+        recycling.asset = new PixelJS.AnimatedSprite();
+        recycling.asset.prepare({
+            name: 'recycling.png',
             frames: 1,
             rows: 1,
             speed: 80,
@@ -149,8 +173,8 @@ document.onreadystatechange = function () {
                     '#FFFFFF',
                     'left'
                 );
-            } if (entity === compost) {
-                player.pos = { x: 0, y: 0 };
+            } if (entity === compost || entity === recycling || entity === garbage) {
+                player.velocity = { x: 0, y: 0 };
                 setTimeout(function () {
                     player.velocity = { x: xvel, y: yvel };
                 }, 500);
@@ -170,6 +194,9 @@ document.onreadystatechange = function () {
         backgroundLayer.registerCollidable(leftWall);
         backgroundLayer.registerCollidable(topWall);
         backgroundLayer.registerCollidable(botWall);
+        backgroundLayer.registerCollidable(compost);
+        backgroundLayer.registerCollidable(garbage);
+        backgroundLayer.registerCollidable(recycling);
         
         playerLayer.registerCollidable(player);
         itemLayer.registerCollidable(coin);
