@@ -6,7 +6,7 @@ const width = 800;
 const height = 600;
 const xvel = 300;
 const yvel = 300;
-
+var isGameOver = false;
 
 document.onreadystatechange = function () {
     if (document.readyState == "complete") {
@@ -392,7 +392,8 @@ document.onreadystatechange = function () {
         }
 
         function tempRedraw(){
-            holdingLayer.redraw = true;
+            if (!isGameOver){
+                holdingLayer.redraw = true;
                 holdingLayer.drawText(
                     'Holding: ' + temp,
                     50,
@@ -401,10 +402,13 @@ document.onreadystatechange = function () {
                     '#FFFFFF',
                     'left'
                 );
+            }
+
         }
 
-        var timeGiven = 4000;
+        var timeGiven = 40000;
         function displayGameOver() {
+            isGameOver = true;
             playerLayer.visible = false;
             itemLayer.visible = false;
             itemLayer1.visible = true;
@@ -435,31 +439,34 @@ document.onreadystatechange = function () {
         }
 
         game.loadAndRun(function (elapsedTime, dt) {
-            updateTimer(elapsedTime);
-            scoreLayer.redraw = true;
-            scoreLayer.drawText(
-                'Coins: ' + score,
-                50,
-                50,
-                '14pt "Trebuchet MS", Helvetica, sans-serif',
-                '#FFFFFF',
-                'left'
-            );
-            holdingLayer.redraw = true;
-            holdingLayer.drawText(
-                'Holding: ' + temp,
-                50,
-                80,
-                '14pt "Trebuchet MS", Helvetica, sans-serif',
-                '#FFFFFF',
-                'left'
-            );
-
-            if (player.collidesWith(compost) || player.collidesWith(recycling) || player.collidesWith(garbage)){
-                player.canMoveDown = false;
-            } else {
-                player.canMoveDown = true;
+            if (!isGameOver){
+                updateTimer(elapsedTime);
+                scoreLayer.redraw = true;
+                scoreLayer.drawText(
+                    'Coins: ' + score,
+                    50,
+                    50,
+                    '14pt "Trebuchet MS", Helvetica, sans-serif',
+                    '#FFFFFF',
+                    'left'
+                );
+                holdingLayer.redraw = true;
+                holdingLayer.drawText(
+                    'Holding: ' + temp,
+                    50,
+                    80,
+                    '14pt "Trebuchet MS", Helvetica, sans-serif',
+                    '#FFFFFF',
+                    'left'
+                );
+    
+                if (player.collidesWith(compost) || player.collidesWith(recycling) || player.collidesWith(garbage)){
+                    player.canMoveDown = false;
+                } else {
+                    player.canMoveDown = true;
+                }
             }
+            
             setTimeout(function () {
                 displayGameOver();
             }, timeGiven);
