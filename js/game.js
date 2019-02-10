@@ -1,5 +1,6 @@
 import StaticEnvironment from "./staticEnvironment.js";
 import ItemCreator from "./items.js";
+import Player from "./player.js";
 
 const width = 800;
 const height = 600;
@@ -29,19 +30,7 @@ document.onreadystatechange = function () {
         grass = staticEnvironment.createGrass();
 
         var playerLayer = game.createLayer("players");
-        var player = new PixelJS.Player();
-        player.addToLayer(playerLayer);
-        player.pos = { x: width / 2, y: height / 2 - 100 };
-        player.size = { width: 64, height: 64 };
-        player.velocity = { x: xvel, y: yvel };
-        player.asset = new PixelJS.AnimatedSprite();
-        player.asset.prepare({
-            name: 'char.png',
-            frames: 4,
-            rows: 4,
-            speed: 50,
-            defaultFrame: 1
-        });
+        var player = Player.createPlayer(playerLayer);
 
         var itemLayer = game.createLayer('items');
         var itemCreator = new ItemCreator(itemLayer);
