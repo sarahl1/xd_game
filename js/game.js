@@ -40,7 +40,7 @@ document.onreadystatechange = function () {
 
         var leftWall = backgroundLayer.createEntity();
         leftWall.pos = { x: -420, y: 0 };
-        leftWall.size = {width: 420, height: height};
+        leftWall.size = { width: 420, height: height };
         leftWall.asset = new PixelJS.AnimatedSprite();
         leftWall.asset.prepare({
             name: 'garbagefire.png',
@@ -52,7 +52,7 @@ document.onreadystatechange = function () {
 
         var topWall = backgroundLayer.createEntity();
         topWall.pos = { x: 0, y: -430 };
-        topWall.size = {width: width, height: 430};
+        topWall.size = { width: width, height: 430 };
         topWall.asset = new PixelJS.AnimatedSprite();
         topWall.asset.prepare({
             name: 'garbagefire.png',
@@ -64,7 +64,7 @@ document.onreadystatechange = function () {
 
         var botWall = backgroundLayer.createEntity();
         botWall.pos = { x: 0, y: height };
-        botWall.size = {width: width, height: 10};
+        botWall.size = { width: width, height: 10 };
         botWall.asset = new PixelJS.AnimatedSprite();
         botWall.asset.prepare({
             name: 'garbagefire.png',
@@ -77,7 +77,7 @@ document.onreadystatechange = function () {
         var playerLayer = game.createLayer("players");
         var player = new PixelJS.Player();
         player.addToLayer(playerLayer);
-        player.pos = { x: width/2, y: height/2-100 };
+        player.pos = { x: width / 2, y: height / 2 - 100 };
         player.size = { width: 64, height: 64 };
         player.velocity = { x: xvel, y: yvel };
         player.asset = new PixelJS.AnimatedSprite();
@@ -104,7 +104,7 @@ document.onreadystatechange = function () {
         });
 
         var compost = itemLayer.createEntity();
-        compost.pos = { x: width/3 , y: height/2 };
+        compost.pos = { x: width / 3, y: height / 2 };
         compost.size = { width: 16, height: 16 };
         compost.asset = new PixelJS.AnimatedSprite();
         compost.asset.prepare({
@@ -116,7 +116,7 @@ document.onreadystatechange = function () {
         });
 
         var garbage = itemLayer.createEntity();
-        garbage.pos = { x: width/2+20 , y: height/2 };
+        garbage.pos = { x: width / 2 + 20, y: height / 2 };
         garbage.size = { width: 19, height: 16 };
         garbage.asset = new PixelJS.AnimatedSprite();
         garbage.asset.prepare({
@@ -128,7 +128,7 @@ document.onreadystatechange = function () {
         });
 
         var recycling = itemLayer.createEntity();
-        recycling.pos = { x: (width*2)/3 +20 , y: height/2 };
+        recycling.pos = { x: (width * 2) / 3 + 20, y: height / 2 };
         recycling.size = { width: 16, height: 16 };
         recycling.asset = new PixelJS.AnimatedSprite();
         recycling.asset.prepare({
@@ -153,9 +153,25 @@ document.onreadystatechange = function () {
         });
         itemLayer1.visible = false;
 
+        var pickupLayer = game.createLayer('pickup');
+        var water_bottle = pickupLayer.createEntity();
+        water_bottle.pos = {
+            x: Math.floor(Math.random() * (700 - 100 + 1) + 100),
+            y: Math.floor(Math.random() * (500 - 100 + 1) + 100)
+        };
+        water_bottle.size = { width: 10, height: 35 };
+        water_bottle.asset = new PixelJS.AnimatedSprite();
+        water_bottle.asset.prepare({
+            name: 'water_bottle.png',
+            frames: 1,
+            rows: 1,
+            speed: 80,
+            defaultFrame: 0
+        });
         var collectSound = game.createSound('collect');
         collectSound.prepare({ name: 'coin.mp3' });
 
+        var temp = "";
         player.onCollide(function (entity) {
             if (entity === coin) {
                 collectSound.play();
@@ -173,19 +189,58 @@ document.onreadystatechange = function () {
                     '#FFFFFF',
                     'left'
                 );
-            } if (entity === compost || entity === recycling || entity === garbage) {
+            }
+            // if (entity.holdingLayer == pickupLayer) {
+            if (entity == water_bottle) {
+                temp = "water bottle";
+                holdingLayer.redraw = true;
+                holdingLayer.drawText(
+                    'Holding: ' + temp,
+                    50,
+                    80,
+                    '14pt "Trebuchet MS", Helvetica, sans-serif',
+                    '#FFFFFF',
+                    'left'
+                );
+                pickupLayer.visible = false;
+            }
+            if (entity === compost || entity === recycling || entity === garbage) {
                 player.velocity = { x: 0, y: 0 };
                 setTimeout(function () {
                     player.velocity = { x: xvel, y: yvel };
                 }, 500);
-            } if (entity === rightWall){
-                player.pos.x = rightWall.pos.x-68;
-            } if (entity === leftWall){
-                player.pos.x = leftWall.pos.x+425;
-            } if (entity === topWall){
-                player.pos.y = topWall.pos.y+435;
-            } if (entity === botWall){
-                player.pos.y = botWall.pos.y-68;
+                if (entity === recycling) {
+                    if (temp === "water bottle") {
+                        temp = "";
+                        score++;
+                        scoreLayer.redraw = true;
+                        scoreLayer.drawText(
+                            'Coins: ' + score,
+                            50,
+                            50,
+                            '14pt "Trebuchet MS", Helvetica, sans-serif',
+                            '#FFFFFF',
+                            'left'
+                        );
+                        holdingLayer.redraw = true;
+                        holdingLayer.drawText(
+                            'Holding: ' + temp,
+                            50,
+                            80,
+                            '14pt "Trebuchet MS", Helvetica, sans-serif',
+                            '#FFFFFF',
+                            'left'
+                        );
+                    }
+                }
+            } if (entity === rightWall) {
+                player.pos.x = rightWall.pos.x - 68;
+            } if (entity === leftWall) {
+                player.pos.x = leftWall.pos.x + 425;
+            } if (entity === topWall) {
+                player.pos.y = topWall.pos.y + 435;
+            } if (entity === botWall) {
+                player.pos.y = botWall.pos.y - 68;
             }
 
         });
@@ -197,10 +252,12 @@ document.onreadystatechange = function () {
         backgroundLayer.registerCollidable(compost);
         backgroundLayer.registerCollidable(garbage);
         backgroundLayer.registerCollidable(recycling);
-        
+
         playerLayer.registerCollidable(player);
         itemLayer.registerCollidable(coin);
         itemLayer.registerCollidable(compost);
+
+        pickupLayer.registerCollidable(water_bottle);
 
 
 
@@ -209,9 +266,10 @@ document.onreadystatechange = function () {
         var scoreLayer = game.createLayer("score");
         scoreLayer.static = true;
 
-        var holding = "";
+        var holding = { bool: false, name: "" };
         var holdingLayer = game.createLayer("holding");
         holdingLayer.static = true;
+
 
 
         function updateTime() {
@@ -221,6 +279,24 @@ document.onreadystatechange = function () {
         }
 
         game.loadAndRun(function (elapsedTime, dt) {
+            scoreLayer.redraw = true;
+            scoreLayer.drawText(
+                'Coins: ' + score,
+                50,
+                50,
+                '14pt "Trebuchet MS", Helvetica, sans-serif',
+                '#FFFFFF',
+                'left'
+            );
+            holdingLayer.redraw = true;
+            holdingLayer.drawText(
+                'Holding: ' + temp,
+                50,
+                80,
+                '14pt "Trebuchet MS", Helvetica, sans-serif',
+                '#FFFFFF',
+                'left'
+            );
             setTimeout(function () {
                 updateTime();
             }, 60000);
