@@ -403,18 +403,21 @@ document.onreadystatechange = function () {
                 );
         }
 
+        var timeGiven = 4000;
         function displayGameOver() {
             playerLayer.visible = false;
             itemLayer.visible = false;
             itemLayer1.visible = true;
             pickupLayer.visible = false;
             gameOverLayer.redraw = true;
+            holdingLayer.redraw = false;
+            scoreLayer.redraw = false;
             gameOverLayer.drawText(
                 'GAME OVER',
-                width / 2 - 45,
+                width / 2 - 70,
                 height - 40,
-                '14pt "Trebuchet MS", Helvetica, sans-serif',
-                '#FFFFFF',
+                '24pt "Trebuchet MS", Helvetica, sans-serif',
+                '#FF0000',
                 'left'
             )
         }
@@ -422,7 +425,7 @@ document.onreadystatechange = function () {
         var updateTimer = function (elapsedTime) {
             scoreLayer.redraw = true;
             scoreLayer.drawText(
-                'Timer: ' + Math.round(elapsedTime / 1000),
+                'Timer: ' + (timeGiven/1000 - Math.round(elapsedTime / 1000)),
                 700,
                 50,
                 '14pt "Trebuchet MS", Helvetica, sans-serif',
@@ -431,7 +434,6 @@ document.onreadystatechange = function () {
             );
         }
 
-        var timeGiven = 40000;
         game.loadAndRun(function (elapsedTime, dt) {
             updateTimer(elapsedTime);
             scoreLayer.redraw = true;
