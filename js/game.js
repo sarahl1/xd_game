@@ -310,6 +310,18 @@ document.onreadystatechange = function () {
             )
         }
 
+        var updateTimer = function(elapsedTime){
+            scoreLayer.redraw = true;
+            scoreLayer.drawText(
+                'Timer: ' + Math.round(elapsedTime/1000),
+                50,
+                570,
+                '14pt "Trebuchet MS", Helvetica, sans-serif',
+                '#FFFFFF',
+                'left'
+            );
+        }
+
         var timeGiven = 40000;
         game.loadAndRun(function (elapsedTime, dt) {
             // setInterval(function () {
@@ -323,6 +335,7 @@ document.onreadystatechange = function () {
             //         'left'
             //     );
             // }, 1000);
+            updateTimer(elapsedTime);
             scoreLayer.redraw = true;
             scoreLayer.drawText(
                 'Coins: ' + score,
