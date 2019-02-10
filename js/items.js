@@ -22,8 +22,8 @@ export default class ItemCreator{
         });
 
         var compost = this.itemLayer.createEntity();
-        compost.pos = { x: width / 3, y: height / 2 };
-        compost.size = { width: 12, height: 16 };
+        compost.pos = { x: 0, y: height - 72 };
+        compost.size = { width: 266, height: 50 };
         compost.asset = new PixelJS.AnimatedSprite();
         compost.asset.prepare({
             name: 'compostRow.png',
@@ -34,8 +34,8 @@ export default class ItemCreator{
         });
 
         var garbage = this.itemLayer.createEntity();
-        garbage.pos = { x: width / 2 + 20, y: height / 2 };
-        garbage.size = { width: 10, height: 16 };
+        garbage.pos = { x: 266, y: height - 72 };
+        garbage.size = { width: 266, height: 50 };
         garbage.asset = new PixelJS.AnimatedSprite();
         garbage.asset.prepare({
             name: 'garbageRow.png',
@@ -46,8 +46,8 @@ export default class ItemCreator{
         });
 
         var recycling = this.itemLayer.createEntity();
-        recycling.pos = { x: (width * 2) / 3 + 20, y: height / 2 };
-        recycling.size = { width: 12, height: 16 };
+        recycling.pos = { x: 266 * 2, y: height - 72 };
+        recycling.size = { width: 266, height: 50 };
         recycling.asset = new PixelJS.AnimatedSprite();
         recycling.asset.prepare({
             name: 'recyclingRow.png',

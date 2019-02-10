@@ -275,10 +275,7 @@ document.onreadystatechange = function () {
             }
 
             if (entity === compost || entity === recycling || entity === garbage) {
-                player.velocity = { x: 0, y: 0 };
-                setTimeout(function () {
-                    player.velocity = { x: xvel, y: yvel };
-                }, 500);
+                
                 if (entity === recycling) {
                     if (temp === "water bottle") {
                         updateScoreHolding();
@@ -456,6 +453,11 @@ document.onreadystatechange = function () {
                 'left'
             );
 
+            if (player.collidesWith(compost) || player.collidesWith(recycling) || player.collidesWith(garbage)){
+                player.canMoveDown = false;
+            } else {
+                player.canMoveDown = true;
+            }
             setTimeout(function () {
                 displayGameOver();
             }, timeGiven);
