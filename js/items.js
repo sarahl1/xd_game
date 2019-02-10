@@ -26,7 +26,7 @@ export default class ItemCreator{
         compost.size = { width: 12, height: 16 };
         compost.asset = new PixelJS.AnimatedSprite();
         compost.asset.prepare({
-            name: 'compost.png',
+            name: 'compostRow.png',
             frames: 1,
             rows: 1,
             speed: 80,
@@ -38,7 +38,7 @@ export default class ItemCreator{
         garbage.size = { width: 10, height: 16 };
         garbage.asset = new PixelJS.AnimatedSprite();
         garbage.asset.prepare({
-            name: 'garbage.png',
+            name: 'garbageRow.png',
             frames: 1,
             rows: 1,
             speed: 80,
@@ -50,7 +50,7 @@ export default class ItemCreator{
         recycling.size = { width: 12, height: 16 };
         recycling.asset = new PixelJS.AnimatedSprite();
         recycling.asset.prepare({
-            name: 'recycling.png',
+            name: 'recyclingRow.png',
             frames: 1,
             rows: 1,
             speed: 80,
