@@ -148,22 +148,54 @@ document.onreadystatechange = function () {
         });
         newspaper.opacity = 0;
 
-        function initPickups(entity, width, height) {
-            var entity = pickupLayer.createEntity();
-            entity.pos = {
-                x: Math.floor(Math.random() * (700 - 100 + 1) + 100),
-                y: Math.floor(Math.random() * (500 - 100 + 1) + 100)
-            };
-            entity.size = { width: 10, height: 35 };
-            entity.asset = new PixelJS.AnimatedSprite();
-            entity.asset.prepare({
-                name: entity + '.png',
-                frames: 1,
-                rows: 1,
-                speed: 80,
-                defaultFrame: 0
-            });
-        }
+        var soda_can = pickupLayer.createEntity();
+        soda_can.pos = {
+            x: Math.floor(Math.random() * (700 - 100 + 1) + 100),
+            y: Math.floor(Math.random() * (500 - 100 + 1) + 100)
+        };
+        soda_can.size = { width: 35, height: 45 };
+        soda_can.asset = new PixelJS.AnimatedSprite();
+        soda_can.asset.prepare({
+            name: 'soda_can.png',
+            frames: 1,
+            rows: 1,
+            speed: 80,
+            defaultFrame: 0
+        });
+        soda_can.opacity = 0;
+
+        var pizza_box = pickupLayer.createEntity();
+        pizza_box.pos = {
+            x: Math.floor(Math.random() * (700 - 100 + 1) + 100),
+            y: Math.floor(Math.random() * (500 - 100 + 1) + 100)
+        };
+        pizza_box.size = { width: 50, height: 30 };
+        pizza_box.asset = new PixelJS.AnimatedSprite();
+        pizza_box.asset.prepare({
+            name: 'pizza_box.png',
+            frames: 1,
+            rows: 1,
+            speed: 80,
+            defaultFrame: 0
+        });
+        pizza_box.opacity = 0;
+
+        var mug = pickupLayer.createEntity();
+        mug.pos = {
+            x: Math.floor(Math.random() * (700 - 100 + 1) + 100),
+            y: Math.floor(Math.random() * (500 - 100 + 1) + 100)
+        };
+        mug.size = { width: 50, height: 30 };
+        mug.asset = new PixelJS.AnimatedSprite();
+        mug.asset.prepare({
+            name: 'mug.png',
+            frames: 1,
+            rows: 1,
+            speed: 80,
+            defaultFrame: 0
+        });
+        mug.opacity = 0;
+
 
         var collectSound = game.createSound('collect');
         collectSound.prepare({ name: 'coin.mp3' });
@@ -189,88 +221,59 @@ document.onreadystatechange = function () {
             }
             if (entity == water_bottle && temp == "") {
                 temp = "water bottle";
-                holdingLayer.redraw = true;
-                holdingLayer.drawText(
-                    'Holding: ' + temp,
-                    50,
-                    80,
-                    '14pt "Trebuchet MS", Helvetica, sans-serif',
-                    '#FFFFFF',
-                    'left'
-                );
+                tempRedraw();
                 water_bottle.dispose();
                 water_bottle = null;
             }
             if (entity == cup && temp == "") {
                 temp = "styrofoam cup";
-                holdingLayer.redraw = true;
-                holdingLayer.drawText(
-                    'Holding: ' + temp,
-                    50,
-                    80,
-                    '14pt "Trebuchet MS", Helvetica, sans-serif',
-                    '#FFFFFF',
-                    'left'
-                );
+                tempRedraw();
                 cup.dispose();
                 cup = null;
             }
             if (entity == pweeza && temp == "") {
                 temp = "pweeza";
-                holdingLayer.redraw = true;
-                holdingLayer.drawText(
-                    'Holding: ' + temp,
-                    50,
-                    80,
-                    '14pt "Trebuchet MS", Helvetica, sans-serif',
-                    '#FFFFFF',
-                    'left'
-                );
+                tempRedraw();
                 pweeza.dispose();
                 pweeza = null;
             }
             if (entity == glass_bottle && temp == "") {
                 temp = "glass bottle";
-                holdingLayer.redraw = true;
-                holdingLayer.drawText(
-                    'Holding: ' + temp,
-                    50,
-                    80,
-                    '14pt "Trebuchet MS", Helvetica, sans-serif',
-                    '#FFFFFF',
-                    'left'
-                );
+                tempRedraw();
                 glass_bottle.dispose();
                 glass_bottle = null;
             }
             if (entity == paper_bag && temp == "") {
                 temp = "paper bag";
-                holdingLayer.redraw = true;
-                holdingLayer.drawText(
-                    'Holding: ' + temp,
-                    50,
-                    80,
-                    '14pt "Trebuchet MS", Helvetica, sans-serif',
-                    '#FFFFFF',
-                    'left'
-                );
+                tempRedraw();
                 paper_bag.dispose();
                 paper_bag = null;
             }
             if (entity == newspaper && temp == "") {
                 temp = "newspaper";
-                holdingLayer.redraw = true;
-                holdingLayer.drawText(
-                    'Holding: ' + temp,
-                    50,
-                    80,
-                    '14pt "Trebuchet MS", Helvetica, sans-serif',
-                    '#FFFFFF',
-                    'left'
-                );
+                tempRedraw();
                 newspaper.dispose();
                 newspaper = null;
             }
+            if (entity == soda_can && temp == "") {
+                temp = "soda can";
+                tempRedraw();
+                soda_can.dispose();
+                soda_can = null;
+            }
+            if (entity == pizza_box && temp == ""){
+                temp = "dirty pizza box";
+                tempRedraw();
+                pizza_box.dispose();
+                pizza_box = null;
+            }
+            if (entity == mug && temp == ""){
+                temp = "broken glass mug";
+                tempRedraw();
+                mug.dispose();
+                mug = null;
+            }
+
             if (entity === compost || entity === recycling || entity === garbage) {
                 player.velocity = { x: 0, y: 0 };
                 setTimeout(function () {
@@ -292,6 +295,13 @@ document.onreadystatechange = function () {
                     }
                     if (temp === "newspaper") {
                         updateScoreHolding();
+                        pickupLayer.registerCollidable(soda_can);
+                        soda_can.opacity = 1;
+                    }
+                    if (temp === "soda can") {
+                        updateScoreHolding();
+                        pickupLayer.registerCollidable(pizza_box);
+                        pizza_box.opacity = 1;
                     }
                 }
                 if (entity === garbage) {
@@ -300,6 +310,10 @@ document.onreadystatechange = function () {
                         pickupLayer.registerCollidable(pweeza);
                         pweeza.opacity = 1;
                     }
+                    if (temp === "broken glass mug") {
+                        updateScoreHolding();
+                    }
+
                 }
                 if (entity === compost) {
                     if (temp === "pweeza") {
@@ -311,6 +325,11 @@ document.onreadystatechange = function () {
                         updateScoreHolding();
                         pickupLayer.registerCollidable(newspaper);
                         newspaper.opacity = 1;
+                    }
+                    if (temp === "dirty pizza box") {
+                        updateScoreHolding();
+                        pickupLayer.registerCollidable(mug);
+                        mug.opacity = 1;
                     }
                 }
             } if (entity === rightWall) {
@@ -373,6 +392,18 @@ document.onreadystatechange = function () {
                             '#FFFFFF',
                             'left'
                         );
+        }
+
+        function tempRedraw(){
+            holdingLayer.redraw = true;
+                holdingLayer.drawText(
+                    'Holding: ' + temp,
+                    50,
+                    80,
+                    '14pt "Trebuchet MS", Helvetica, sans-serif',
+                    '#FFFFFF',
+                    'left'
+                );
         }
 
         function displayGameOver() {
