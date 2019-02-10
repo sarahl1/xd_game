@@ -1,4 +1,5 @@
 import StaticEnvironment from "./staticEnvironment.js";
+import ItemCreator from "./items.js";
 
 const width = 800;
 const height = 600;
@@ -42,55 +43,12 @@ document.onreadystatechange = function () {
             defaultFrame: 1
         });
 
-
         var itemLayer = game.createLayer('items');
-        var coin = itemLayer.createEntity();
-        coin.pos = { x: 400, y: 450 };
-        coin.size = { width: 12, height: 16 };
-        coin.asset = new PixelJS.AnimatedSprite();
-        coin.asset.prepare({
-            name: 'coin.png',
-            frames: 8,
-            rows: 1,
-            speed: 80,
-            defaultFrame: 0
-        });
+        var itemCreator = new ItemCreator(itemLayer);
 
-        var compost = itemLayer.createEntity();
-        compost.pos = { x: width / 3, y: height / 2 };
-        compost.size = { width: 12, height: 16 };
-        compost.asset = new PixelJS.AnimatedSprite();
-        compost.asset.prepare({
-            name: 'compost.png',
-            frames: 1,
-            rows: 1,
-            speed: 80,
-            defaultFrame: 0
-        });
-
-        var garbage = itemLayer.createEntity();
-        garbage.pos = { x: width / 2 + 20, y: height / 2 };
-        garbage.size = { width: 10, height: 16 };
-        garbage.asset = new PixelJS.AnimatedSprite();
-        garbage.asset.prepare({
-            name: 'garbage.png',
-            frames: 1,
-            rows: 1,
-            speed: 80,
-            defaultFrame: 0
-        });
-
-        var recycling = itemLayer.createEntity();
-        recycling.pos = { x: (width * 2) / 3 + 20, y: height / 2 };
-        recycling.size = { width: 12, height: 16 };
-        recycling.asset = new PixelJS.AnimatedSprite();
-        recycling.asset.prepare({
-            name: 'recycling.png',
-            frames: 1,
-            rows: 1,
-            speed: 80,
-            defaultFrame: 0
-        });
+        var coin, compost, garbage, recycling;
+        [coin, compost, garbage, recycling] = itemCreator.createItems()
+       
 
         var itemLayer1 = game.createLayer('items1');
         var fire = itemLayer1.createEntity();
