@@ -6,7 +6,6 @@ const width = 800;
 const height = 600;
 const xvel = 300;
 const yvel = 300;
-var max = 0;
 
 
 document.onreadystatechange = function () {
@@ -25,7 +24,7 @@ document.onreadystatechange = function () {
         var rightWall, leftWall, topWall, botWall;
         var grass;
 
-        [rightWall,leftWall, topWall, botWall] = staticEnvironment.createWalls();
+        [rightWall, leftWall, topWall, botWall] = staticEnvironment.createWalls();
         grass = staticEnvironment.createGrass();
 
         var playerLayer = game.createLayer("players");
@@ -36,7 +35,7 @@ document.onreadystatechange = function () {
 
         var coin, compost, garbage, recycling;
         [coin, compost, garbage, recycling] = itemCreator.createItems()
-       
+
 
         var itemLayer1 = game.createLayer('items1');
         var fire = itemLayer1.createEntity();
@@ -99,6 +98,72 @@ document.onreadystatechange = function () {
             defaultFrame: 0
         });
         pweeza.opacity = 0;
+
+        var glass_bottle = pickupLayer.createEntity();
+        glass_bottle.pos = {
+            x: Math.floor(Math.random() * (700 - 100 + 1) + 100),
+            y: Math.floor(Math.random() * (500 - 100 + 1) + 100)
+        };
+        glass_bottle.size = { width: 20, height: 40 };
+        glass_bottle.asset = new PixelJS.AnimatedSprite();
+        glass_bottle.asset.prepare({
+            name: 'glass_bottle.png',
+            frames: 1,
+            rows: 1,
+            speed: 80,
+            defaultFrame: 0
+        });
+        glass_bottle.opacity = 0;
+
+
+        var paper_bag = pickupLayer.createEntity();
+        paper_bag.pos = {
+            x: Math.floor(Math.random() * (700 - 100 + 1) + 100),
+            y: Math.floor(Math.random() * (500 - 100 + 1) + 100)
+        };
+        paper_bag.size = { width: 20, height: 40 };
+        paper_bag.asset = new PixelJS.AnimatedSprite();
+        paper_bag.asset.prepare({
+            name: 'paper_bag.png',
+            frames: 1,
+            rows: 1,
+            speed: 80,
+            defaultFrame: 0
+        });
+        paper_bag.opacity = 0;
+
+        var newspaper = pickupLayer.createEntity();
+        newspaper.pos = {
+            x: Math.floor(Math.random() * (700 - 100 + 1) + 100),
+            y: Math.floor(Math.random() * (500 - 100 + 1) + 100)
+        };
+        newspaper.size = { width: 50, height: 35 };
+        newspaper.asset = new PixelJS.AnimatedSprite();
+        newspaper.asset.prepare({
+            name: 'newspaper.png',
+            frames: 1,
+            rows: 1,
+            speed: 80,
+            defaultFrame: 0
+        });
+        newspaper.opacity = 0;
+
+        function initPickups(entity, width, height) {
+            var entity = pickupLayer.createEntity();
+            entity.pos = {
+                x: Math.floor(Math.random() * (700 - 100 + 1) + 100),
+                y: Math.floor(Math.random() * (500 - 100 + 1) + 100)
+            };
+            entity.size = { width: 10, height: 35 };
+            entity.asset = new PixelJS.AnimatedSprite();
+            entity.asset.prepare({
+                name: entity + '.png',
+                frames: 1,
+                rows: 1,
+                speed: 80,
+                defaultFrame: 0
+            });
+        }
 
         var collectSound = game.createSound('collect');
         collectSound.prepare({ name: 'coin.mp3' });
@@ -164,6 +229,48 @@ document.onreadystatechange = function () {
                 pweeza.dispose();
                 pweeza = null;
             }
+            if (entity == glass_bottle && temp == "") {
+                temp = "glass bottle";
+                holdingLayer.redraw = true;
+                holdingLayer.drawText(
+                    'Holding: ' + temp,
+                    50,
+                    80,
+                    '14pt "Trebuchet MS", Helvetica, sans-serif',
+                    '#FFFFFF',
+                    'left'
+                );
+                glass_bottle.dispose();
+                glass_bottle = null;
+            }
+            if (entity == paper_bag && temp == "") {
+                temp = "paper bag";
+                holdingLayer.redraw = true;
+                holdingLayer.drawText(
+                    'Holding: ' + temp,
+                    50,
+                    80,
+                    '14pt "Trebuchet MS", Helvetica, sans-serif',
+                    '#FFFFFF',
+                    'left'
+                );
+                paper_bag.dispose();
+                paper_bag = null;
+            }
+            if (entity == newspaper && temp == "") {
+                temp = "newspaper";
+                holdingLayer.redraw = true;
+                holdingLayer.drawText(
+                    'Holding: ' + temp,
+                    50,
+                    80,
+                    '14pt "Trebuchet MS", Helvetica, sans-serif',
+                    '#FFFFFF',
+                    'left'
+                );
+                newspaper.dispose();
+                newspaper = null;
+            }
             if (entity === compost || entity === recycling || entity === garbage) {
                 player.velocity = { x: 0, y: 0 };
                 setTimeout(function () {
@@ -171,84 +278,39 @@ document.onreadystatechange = function () {
                 }, 500);
                 if (entity === recycling) {
                     if (temp === "water bottle") {
-                        collectSound.play();
-                        temp = "";
-                        //update score
-                        score += 5;
-                        scoreLayer.redraw = true;
-                        scoreLayer.drawText(
-                            'Coins: ' + score,
-                            50,
-                            50,
-                            '14pt "Trebuchet MS", Helvetica, sans-serif',
-                            '#FFFFFF',
-                            'left'
-                        );
-                        //update holding
-                        holdingLayer.redraw = true;
-                        holdingLayer.drawText(
-                            'Holding: ' + temp,
-                            50,
-                            80,
-                            '14pt "Trebuchet MS", Helvetica, sans-serif',
-                            '#FFFFFF',
-                            'left'
-                        );
+                        updateScoreHolding();
                         //show next item
                         pickupLayer.registerCollidable(cup);
                         cup.opacity = 1;
                     }
+                    if (temp === "glass bottle") {
+                        updateScoreHolding();
+                        //show next item
+                        pickupLayer.registerCollidable(paper_bag);
+                        paper_bag.opacity = 1;
+
+                    }
+                    if (temp === "newspaper") {
+                        updateScoreHolding();
+                    }
                 }
                 if (entity === garbage) {
                     if (temp === "styrofoam cup") {
-                        collectSound.play();
-                        temp = "";
-                        score += 5;
-                        scoreLayer.redraw = true;
-                        scoreLayer.drawText(
-                            'Coins: ' + score,
-                            50,
-                            50,
-                            '14pt "Trebuchet MS", Helvetica, sans-serif',
-                            '#FFFFFF',
-                            'left'
-                        );
-                        holdingLayer.redraw = true;
-                        holdingLayer.drawText(
-                            'Holding: ' + temp,
-                            50,
-                            80,
-                            '14pt "Trebuchet MS", Helvetica, sans-serif',
-                            '#FFFFFF',
-                            'left'
-                        );
+                        updateScoreHolding();
                         pickupLayer.registerCollidable(pweeza);
                         pweeza.opacity = 1;
                     }
                 }
                 if (entity === compost) {
                     if (temp === "pweeza") {
-                        collectSound.play();
-                        temp = "";
-                        score += 5;
-                        scoreLayer.redraw = true;
-                        scoreLayer.drawText(
-                            'Coins: ' + score,
-                            50,
-                            50,
-                            '14pt "Trebuchet MS", Helvetica, sans-serif',
-                            '#FFFFFF',
-                            'left'
-                        );
-                        holdingLayer.redraw = true;
-                        holdingLayer.drawText(
-                            'Holding: ' + temp,
-                            50,
-                            80,
-                            '14pt "Trebuchet MS", Helvetica, sans-serif',
-                            '#FFFFFF',
-                            'left'
-                        );
+                        updateScoreHolding();
+                        pickupLayer.registerCollidable(glass_bottle);
+                        glass_bottle.opacity = 1;
+                    }
+                    if (temp === "paper bag") {
+                        updateScoreHolding();
+                        pickupLayer.registerCollidable(newspaper);
+                        newspaper.opacity = 1;
                     }
                 }
             } if (entity === rightWall) {
@@ -286,13 +348,32 @@ document.onreadystatechange = function () {
         var holdingLayer = game.createLayer("holding");
         holdingLayer.static = true;
 
-        var timer = 0;
-        var timerLayer = game.createLayer("timer");
-        timerLayer.static = true;
-
         var gameOverLayer = game.createLayer("gameover");
         gameOverLayer.static = true;
 
+        function updateScoreHolding(){
+            collectSound.play();
+                        temp = "";
+                        score += 5;
+                        scoreLayer.redraw = true;
+                        scoreLayer.drawText(
+                            'Coins: ' + score,
+                            50,
+                            50,
+                            '14pt "Trebuchet MS", Helvetica, sans-serif',
+                            '#FFFFFF',
+                            'left'
+                        );
+                        holdingLayer.redraw = true;
+                        holdingLayer.drawText(
+                            'Holding: ' + temp,
+                            50,
+                            80,
+                            '14pt "Trebuchet MS", Helvetica, sans-serif',
+                            '#FFFFFF',
+                            'left'
+                        );
+        }
 
         function updateTime() {
             playerLayer.visible = false;
@@ -310,10 +391,10 @@ document.onreadystatechange = function () {
             )
         }
 
-        var updateTimer = function(elapsedTime){
+        var updateTimer = function (elapsedTime) {
             scoreLayer.redraw = true;
             scoreLayer.drawText(
-                'Timer: ' + Math.round(elapsedTime/1000),
+                'Timer: ' + Math.round(elapsedTime / 1000),
                 50,
                 570,
                 '14pt "Trebuchet MS", Helvetica, sans-serif',
@@ -324,17 +405,6 @@ document.onreadystatechange = function () {
 
         var timeGiven = 40000;
         game.loadAndRun(function (elapsedTime, dt) {
-            // setInterval(function () {
-            //     timerLayer.redraw = true;
-            //     timerLayer.drawText(
-            //         timer++,
-            //         50,
-            //         550,
-            //         '14pt "Trebuchet MS", Helvetica, sans-serif',
-            //         '#FFFFFF',
-            //         'left'
-            //     );
-            // }, 1000);
             updateTimer(elapsedTime);
             scoreLayer.redraw = true;
             scoreLayer.drawText(
