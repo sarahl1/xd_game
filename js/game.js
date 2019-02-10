@@ -294,7 +294,7 @@ document.onreadystatechange = function () {
         gameOverLayer.static = true;
 
 
-        function updateTime() {
+        function displayGameOver() {
             playerLayer.visible = false;
             itemLayer.visible = false;
             itemLayer1.visible = true;
@@ -324,17 +324,6 @@ document.onreadystatechange = function () {
 
         var timeGiven = 40000;
         game.loadAndRun(function (elapsedTime, dt) {
-            // setInterval(function () {
-            //     timerLayer.redraw = true;
-            //     timerLayer.drawText(
-            //         timer++,
-            //         50,
-            //         550,
-            //         '14pt "Trebuchet MS", Helvetica, sans-serif',
-            //         '#FFFFFF',
-            //         'left'
-            //     );
-            // }, 1000);
             updateTimer(elapsedTime);
             scoreLayer.redraw = true;
             scoreLayer.drawText(
@@ -356,7 +345,7 @@ document.onreadystatechange = function () {
             );
 
             setTimeout(function () {
-                updateTime();
+                displayGameOver();
             }, timeGiven);
         });
     }
