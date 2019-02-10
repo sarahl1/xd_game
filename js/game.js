@@ -7,8 +7,6 @@ document.onreadystatechange = function () {
             height: 600
         });
 
-    
-
 
         var backgroundLayer = game.createLayer('background');
         var grass = backgroundLayer.createEntity();
@@ -50,17 +48,20 @@ document.onreadystatechange = function () {
             speed: 80,
             defaultFrame: 0
         });
-        // var fire = itemLayer.createEntity();
-        // fire.pos = { x: 400, y: 300};
-        // fire.size = {width: 32, height: 30};
-        // fire.asset = new PixelJS.AnimatedSprite();
-        // fire.asset.prepare({
-        //     name: 'garbagefire.png',
-        //     frames: 1,
-        //     rows: 1,
-        //     speed: 80,
-        //     defaultFrame: 0
-        // });
+
+        var itemLayer1 = game.createLayer('items1');
+        var fire = itemLayer1.createEntity();
+        fire.pos = { x: 200, y: 100};
+        fire.size = {width: 16, height: 16};
+        fire.asset = new PixelJS.AnimatedSprite();
+        fire.asset.prepare({
+            name: 'garbagefire.png',
+            frames: 1,
+            rows: 1,
+            speed: 80,
+            defaultFrame: 0
+        });
+        itemLayer1.visible = false;
 
         var collectSound = game.createSound('collect');
         collectSound.prepare({ name: 'coin.mp3' });
@@ -90,6 +91,7 @@ document.onreadystatechange = function () {
         itemLayer.registerCollidable(coin);
 
 
+
         var score = 0;
         var scoreLayer = game.createLayer("score");
         scoreLayer.static = true;
@@ -99,19 +101,17 @@ document.onreadystatechange = function () {
         holdingLayer.static = true;
 
 
-        // function updateTime(){
-        //     if (elapsedTime == 60){
-        //         playerLayer.visible = false;
-        //         coin.visible = false;
-        //         fire.visible = true;
-        //     }
-        // }
+        function updateTime(){
+                playerLayer.visible = false;
+                itemLayer.visible = false;
+                itemLayer1.visible = true;
+        }
 
         game.loadAndRun(function (elapsedTime, dt) {
-            // fire.visible = false;
-            // setTimeout(function(){
-            //     updateTime();
-            // }, 60000);
+            setTimeout(function(){
+                updateTime();
+            }, 2000);
+
         });
     }
 }
