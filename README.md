@@ -1,3 +1,4 @@
 ![Alt text](xdhacks.png)
 # Recycling? Compost? Garbage???
-try it at bit.ly/binsGame
+Try it at [inline link](bit.ly/binsGame)
+
