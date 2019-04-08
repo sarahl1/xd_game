@@ -408,9 +408,10 @@ document.onreadystatechange = function () {
             itemLayer.visible = false;
             itemLayer1.visible = true;
             pickupLayer.visible = false;
+            scoreLayer.visible = false;
             gameOverLayer.redraw = true;
             gameOverLayer.drawText(
-                'GAME OVER',
+                'GAME OVER\n Score: ' + score,
                 width / 2 - 45,
                 height - 40,
                 '14pt "Trebuchet MS", Helvetica, sans-serif',
