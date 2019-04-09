@@ -6,7 +6,7 @@ const width = 800;
 const height = 600;
 const xvel = 300;
 const yvel = 300;
-
+var isGameOver = false;
 
 document.onreadystatechange = function () {
     if (document.readyState == "complete") {
@@ -392,7 +392,8 @@ document.onreadystatechange = function () {
         }
 
         function tempRedraw(){
-            holdingLayer.redraw = true;
+            if (!isGameOver){
+                holdingLayer.redraw = true;
                 holdingLayer.drawText(
                     'Holding: ' + temp,
                     50,
@@ -401,21 +402,27 @@ document.onreadystatechange = function () {
                     '#FFFFFF',
                     'left'
                 );
+            }
+
         }
 
+        var timeGiven = 40000;
         function displayGameOver() {
+            isGameOver = true;
             playerLayer.visible = false;
             itemLayer.visible = false;
             itemLayer1.visible = true;
             pickupLayer.visible = false;
             scoreLayer.visible = false;
             gameOverLayer.redraw = true;
+            holdingLayer.redraw = false;
+            scoreLayer.redraw = false;
             gameOverLayer.drawText(
                 'GAME OVER\n Score: ' + score,
                 width / 2 - 45,
                 height - 40,
-                '14pt "Trebuchet MS", Helvetica, sans-serif',
-                '#FFFFFF',
+                '24pt "Trebuchet MS", Helvetica, sans-serif',
+                '#FF0000',
                 'left'
             )
         }
@@ -423,7 +430,7 @@ document.onreadystatechange = function () {
         var updateTimer = function (elapsedTime) {
             scoreLayer.redraw = true;
             scoreLayer.drawText(
-                'Timer: ' + Math.round(elapsedTime / 1000),
+                'Timer: ' + (timeGiven/1000 - Math.round(elapsedTime / 1000)),
                 700,
                 50,
                 '14pt "Trebuchet MS", Helvetica, sans-serif',
@@ -432,33 +439,35 @@ document.onreadystatechange = function () {
             );
         }
 
-        var timeGiven = 40000;
         game.loadAndRun(function (elapsedTime, dt) {
-            updateTimer(elapsedTime);
-            scoreLayer.redraw = true;
-            scoreLayer.drawText(
-                'Coins: ' + score,
-                50,
-                50,
-                '14pt "Trebuchet MS", Helvetica, sans-serif',
-                '#FFFFFF',
-                'left'
-            );
-            holdingLayer.redraw = true;
-            holdingLayer.drawText(
-                'Holding: ' + temp,
-                50,
-                80,
-                '14pt "Trebuchet MS", Helvetica, sans-serif',
-                '#FFFFFF',
-                'left'
-            );
-
-            if (player.collidesWith(compost) || player.collidesWith(recycling) || player.collidesWith(garbage)){
-                player.canMoveDown = false;
-            } else {
-                player.canMoveDown = true;
+            if (!isGameOver){
+                updateTimer(elapsedTime);
+                scoreLayer.redraw = true;
+                scoreLayer.drawText(
+                    'Coins: ' + score,
+                    50,
+                    50,
+                    '14pt "Trebuchet MS", Helvetica, sans-serif',
+                    '#FFFFFF',
+                    'left'
+                );
+                holdingLayer.redraw = true;
+                holdingLayer.drawText(
+                    'Holding: ' + temp,
+                    50,
+                    80,
+                    '14pt "Trebuchet MS", Helvetica, sans-serif',
+                    '#FFFFFF',
+                    'left'
+                );
+    
+                if (player.collidesWith(compost) || player.collidesWith(recycling) || player.collidesWith(garbage)){
+                    player.canMoveDown = false;
+                } else {
+                    player.canMoveDown = true;
+                }
             }
+            
             setTimeout(function () {
                 displayGameOver();
             }, timeGiven);

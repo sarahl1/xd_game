@@ -1,2 +1,4 @@
+![Alt text](xdhacks.png)
 # Recycling? Compost? Garbage???
-pixel game made for xdhacks
+Try it [here](https://bit.ly/binsGame)
+
